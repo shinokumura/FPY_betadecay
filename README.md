@@ -1,7 +1,6 @@
 # FPY_betadecay code
 Calculate cumulative fission product yield and delayed neutron yield from Talys independent yield output.
 
-                     Nov. 2021
 ## Download
 You can download the repository from a terminal using:
 
