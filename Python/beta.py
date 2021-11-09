@@ -13,7 +13,7 @@ def cumlative():
     ''' number of defalult iterations '''
     iteration = 100
     ''' convergence threshold '''
-    eps = 5E-3
+    eps = 1.0E-3
 
     ''' create full list of FPs '''
     fplist = list(ind.keys())

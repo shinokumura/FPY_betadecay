@@ -1,7 +1,7 @@
 
 import json
 
-from config import DEFAULT_DECAY_FILE
+from config import DEFAULT_DECAY_FILE, DEFAULT_LONG_LIVED
 from elem import ztoelem
 
 def read_decay_data():
@@ -48,34 +48,38 @@ def read_decay_data():
         ''' read decay infor '''
         decayinfo += lines[ln+2:ln+NS+2]
         DD = {}
-        for decay in decayinfo:
-            NUM = decayinfo.index(decay)
-            RTYP = decay[1:16].strip()  # 0 gamma, 1 beta, 2 ex, 3 IT, 4 alpha, 5 n, 6 SF, 7 proton, 10 unknown
-            RFS  = decay[17:30].strip()  # isomeric state flag for daughter nuclide
-            Q    = decay[31:46].strip()
-            dQ   = decay[47:61].strip()
-            BR   = decay[61:76].strip()
-            dBR  = decay[77:91].strip()
+        ''' if the half life is longer than 1000 years, skip to read decay data '''
+        if float(HL) > DEFAULT_LONG_LIVED:
+            pass
+        else:
+            for decay in decayinfo:
+                NUM = decayinfo.index(decay)
+                RTYP = decay[1:16].strip()  # 0 gamma, 1 beta, 2 ex, 3 IT, 4 alpha, 5 n, 6 SF, 7 proton, 10 unknown
+                RFS  = decay[17:30].strip()  # isomeric state flag for daughter nuclide
+                Q    = decay[31:46].strip()
+                dQ   = decay[47:61].strip()
+                BR   = decay[61:76].strip()
+                dBR  = decay[77:91].strip()
 
-            daughterZ, daughterA = calc_daughter(float(RTYP), int(Z), int(A))
-            daughterELM = ztoelem(int(daughterZ))
+                daughterZ, daughterA = calc_daughter(float(RTYP), int(Z), int(A))
+                daughterELM = ztoelem(int(daughterZ))
 
-            if RFS == "0.0000000E+00":
-                ISO = ""
-            elif RFS == "1.0000000E+00":
-                ISO = "M1"
-            elif RFS == "2.0000000E+00":
-                ISO = "M2"
-            elif RFS == "3.0000000E+00":
-                ISO = "M3"
-            else:
-                ISO = "UNKNOWN"
+                if RFS == "0.0000000E+00":
+                    ISO = ""
+                elif RFS == "1.0000000E+00":
+                    ISO = "M1"
+                elif RFS == "2.0000000E+00":
+                    ISO = "M2"
+                elif RFS == "3.0000000E+00":
+                    ISO = "M3"
+                else:
+                    ISO = "UNKNOWN"
 
-            # daughter = str(daughterZ) + "-" + daughterELM + "-" + str(daughterA) + "-" + ISO
-            # next = str(daughterZ).zfill(3) + str(daughterA).zfill(3) + str(int(float(RFS))).zfill(2)
-            daughter = str(daughterZ) + "-" + daughterELM + "-" + str(daughterA) + "-" + str(int(float(RFS))).zfill(2)
+                # daughter = str(daughterZ) + "-" + daughterELM + "-" + str(daughterA) + "-" + ISO
+                # next = str(daughterZ).zfill(3) + str(daughterA).zfill(3) + str(int(float(RFS))).zfill(2)
+                daughter = str(daughterZ) + "-" + daughterELM + "-" + str(daughterA) + "-" + str(int(float(RFS))).zfill(2)
 
-            DD.update({NUM: {"RTYP": RTYP, "RFS": RFS, "Q": Q, "BR": BR, "DAUGHTER":daughter}})
+                DD.update({NUM: {"RTYP": RTYP, "RFS": RFS, "Q": Q, "BR": BR, "DAUGHTER":daughter}})
         
         decaydata.update({nuclide: {"Z":Z, "ELM":ELM, "MASS": A, "LIS": LIS, "HL": HL, "DecayInfo": DD}})
         
