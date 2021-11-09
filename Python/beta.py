@@ -32,16 +32,16 @@ def cumlative():
     for t in range(iteration):
         # print("iteration:", t)
         for i in fp:
-            ''' initialize daughter 落ちてくる核種のarray（dict）を用意する　'''
+            ''' initialize daughter nuclides (i)　'''
             y2[i] = 0.00
             if y1.get(i) is None:
                 y1[i] = 0.00
             for j in fp: 
-                ''' 落ちていく核種　'''
+                ''' j is for decaying nuclide　'''
                 if i == j:
                     continue
                 dd = DecayData(j)
-                ''' follow all decay modes from FF to FP '''
+                ''' follow all decay modes '''
                 for m in range(dd.get_ndm()):
                     ''' count from 0 '''
                     next = dd.get_next(int(m))
@@ -92,6 +92,8 @@ def delayedn(y):
                 totaldn = totaldn + dn
                 print ("{0:>15s}{1:15.4E}{2:15.4E}{3:15.4E}".format(i, float(v), float(dd.get_branchingratio(int(m))), float(dn)))
     print("\n# total delayed neutron yield/fission: ", "{:.4E}".format(totaldn))
+
+
 
 
 if __name__ == '__main__':

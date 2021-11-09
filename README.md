@@ -9,7 +9,7 @@ git clone https://github.com/shinokumura/FPY_betadecay.git
 ```
 
 ## Run
-1. Calculte fission yiled by Talys using following input file as an example.
+1. Calculate fission yield by Talys using following input file as an example.
 
 ```
 projectile n
@@ -30,4 +30,6 @@ maxchannel 8
 
 2. Modify ``TALYS_FPY_FILE`` path in ``Python/config.py`` to read ``yieldZA1.00E-06.fis``.
 
-3. Run ``python beta.py``
+3. Move to ``Python`` dir.
+
+4.  Run ``python beta.py``.
