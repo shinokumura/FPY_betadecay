@@ -123,10 +123,10 @@ def calc_daughter(RTYP, Z, A):
         return Z-2, A-4
         
     elif RTYP == 4.0:   # alhpha
-        return Z, A-1
+        return Z-2, A-4
 
     elif RTYP == 5.0:
-        return Z+1, A
+        return Z, A-1
     elif RTYP == 5.5:
         return Z, A-2
     elif RTYP == 5.55:
