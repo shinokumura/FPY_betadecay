@@ -28,8 +28,22 @@ channels n
 maxchannel 8
 ```
 
-2. Modify ``TALYS_FPY_FILE`` path in ``Python/config.py`` to read ``yieldZA1.00E-06.fis``.
+2. Move to ``Python`` dir.
 
-3. Move to ``Python`` dir.
+3. Modify parameters in ``Python/config.py`` as it needs.
+```
+# for cumulative yield calculation
+CUMLATIVE: set ``True`` if calculate cumulative yield based on ``TALYS_FPY_FILE`` independent yield
+TALYS_FPY_FILE: default independent FPY file created by TALYS
+DEFAULT_DECAY_FILE: simplified decay data library file
 
-4.  Run ``python beta.py``.
+# for decay heat calculation
+DECAYHEAT: set ``True`` if time dependent decay heat calculation is required
+DECAY_HEAT_CALC_TIME: give time sequence for time dependent decay heat calculation 
+
+# convert ENDF format decay data library into simplified format
+CONVERT: set ``True`` if convert other decay data library into simplified format is necessary
+DECAY_DATA_LIB_PATH: decay data library path to convert
+```
+
+4.  Run ``python main.py``.
