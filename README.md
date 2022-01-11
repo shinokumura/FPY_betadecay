@@ -28,9 +28,9 @@ channels n
 maxchannel 8
 ```
 
-2. Run ``pip install -r requirement.txt`` if you need.
+2. Move to ``Python`` dir.
 
-3. Move to ``Python`` dir.
+3. Run ``pip install -r requirement.txt`` if you need.
 
 4. Modify parameters in ``Python/config.py`` as it needs.
 ```
