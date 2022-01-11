@@ -23,7 +23,7 @@ ffmodel 2
 elow 1.e-6
 Rfiseps 1.e-3
 outspectra y
-bins 100
+bins 60
 channels n
 maxchannel 8
 ```
