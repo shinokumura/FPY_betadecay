@@ -1,60 +1,55 @@
-import math
+from math import exp
 
-from decaydata import *
-from fpy import read_fpy_data
-from config import DEFAULT_LONG_LIVED
+from config import SMALLEST_YIELD_CONSIDERED, DEFAULT_SIGNIFICUNT_NUMBER
+from utilities import signum_round
 
-
-def singledecay(N0, tau, hl, time):
-    return tau * N0 * math.exp((-0.693/hl)*time)
-
-def track_chain():
-    pass
-
-# def bateman(lmbd, t):
-def bateman():
-    max_number_of_chain = 10
-    # if lmbd is None or t is None:
-    # ind = read_fpy_data()
-    ind = {'65-Tb-144-01': 0.001, '65-Tb-142-00': 0.005}
-    # https://github.com/bjodah/batemaneq/blob/master/batemaneq/bateman.py
-    for nuk in ind:
-        print(nuk)
-        track = {}
-        ''' parent nuclide '''
-        track[nuk] = {}
-        pp = DecayData(nuk)
-        ''' first set of daughters '''
-        i = 0
-        for m in range(pp.get_ndm()):
-            hl =  pp.get_halflife()
-            lmbd = pp.get_branchingratio(int(m))
-            next = pp.get_next(int(m))
-            while True:
-                track[nuk][i] = get_next_info(next)
-                if track[nuk][i]['next'] is None:
-                    break
-                if float(hl) > DEFAULT_LONG_LIVED:
-                    break
-                if max_number_of_chain < i:
-                    break
-                i += 1
-                print(i, track)
+def singledecay(lmbd, N0, t = 20):
+    return N0 * exp(-lmbd * t)
 
 
-def get_next_info(nuclide):
-    dd = DecayData(nuclide)
-    track = {}
-    for m in range(dd.get_ndm()):
-        hl =  dd.get_halflife()
-        lmbd = dd.get_branchingratio(int(m))
-        next = dd.get_next(int(m))
-        track = {'hl': hl, 'lmbd': lmbd, 'next': next}
-    return dict(track)
+def bateman(lmbds, Y0 = 1.0, t = 20):
+    '''
+    inputs
+    lmbds: lambdas of all nuclides in the chain
+    Y0: initial fraction
+    t: time period in sec
+    '''
+    n = len(lmbds)
+    X = [None] * n
+    lmbd_product = 1.0
+    for i in range(n):
+        if i > 0:
+            lmbd_product *= lmbds[i-1]
+        xi = 0.0
+        for k in range(i+1):
+            denominator = 1.0
+            for l in range(i+1):
+                if l == k:
+                    continue
+                if lmbds[l] == lmbds[k]:
+                    lmbds[k] *= 0.0001
+                denominator *= lmbds[l] - lmbds[k]
+
+            xi += lmbd_product/denominator * exp(-lmbds[k]*t) * Y0
+
+        if xi < 0.00 or xi < SMALLEST_YIELD_CONSIDERED:
+            xi = SMALLEST_YIELD_CONSIDERED
+
+        X[i] = signum_round(xi, DEFAULT_SIGNIFICUNT_NUMBER)
+
+    if abs(1-Y0/sum(X)) > 1.0:
+        print("  initial fraction", Y0, "is not conserved-->", signum_round(sum(X),5), "deviation:",signum_round(abs(1-Y0/sum(X)),5))
+        pass
+    else:
+        # print(Y0, " initial independent yield conserved-->", signum_round(sum(X),5))
+        pass
+
+    return X
 
 
 
+if __name__ == "__main__":
+    bateman([6.3200003E-01, 1.0, 0.88499999, 0.99996299])
 
-bateman()
 
 
