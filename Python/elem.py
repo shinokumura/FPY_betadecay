@@ -1,6 +1,3 @@
-
-
-
 # ------------------------------------------------------------------------------
 # Element
 #
@@ -115,8 +112,9 @@ ELEMS = [
     "Hs",
     "Mt",
     "Ds",
-    "Rg"
+    "Rg",
 ]
+
 
 def ztoelem(z):
     if z == 0:
@@ -138,4 +136,3 @@ def elemtoz(elem):
     except ValueError:
         z = ""
     return z
-
