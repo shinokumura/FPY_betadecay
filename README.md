@@ -28,9 +28,11 @@ channels n
 maxchannel 8
 ```
 
-2. Move to ``Python`` dir.
+2. Run ``pip install -r requirement.txt`` if you need.
 
-3. Modify parameters in ``Python/config.py`` as it needs.
+3. Move to ``Python`` dir.
+
+4. Modify parameters in ``Python/config.py`` as it needs.
 ```
 # for cumulative yield calculation
 CUMLATIVE: set ``True``  for calculation of cumulative yield based on ``TALYS_FPY_FILE`` independent yield
