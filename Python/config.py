@@ -11,19 +11,20 @@ SMALLEST_YIELD_CONSIDERED = 1.0e-50
 DEFAULT_SIGNIFICUNT_NUMBER = 5
 
 """ TALYS FPY data """
-TALYS_FPY_FILE = "sample/yieldZA1.00E-06.fis"
+TALYS_FPY_FILE = "sample/yieldZA1.00E-06.fis.gef"
 # TALYS_FPY_FILE = "sample/conv_fpy_endfb71.dat"
 # TALYS_FPY_FILE = "sample/conv-fpy_U235_JENDL4.0.dat"
 
 """ true if cumulative yield is calculated """
-CUMLATIVE = False
+CUMLATIVE = True
 
 """ true if decay data need to be converted into simple format """
 CONVERT = False
 DECAY_DATA_LIB_PATH_ENDF = "/Users/okumuras/Documents/nucleardata/ENDF/ENDFdecay/"
 DECAY_DATA_LIB_PATH_JEFF = "/Users/okumuras/Documents/nucleardata/JEFF33-rdd/"
-DECAY_DATA_LIB_PATH_JENDL = ("/Users/okumuras/Documents/nucleardata/JENDL/jendl-ddf-2015/")
-DECAY_DATA_LIB_PATH = DECAY_DATA_LIB_PATH_ENDF
+# DECAY_DATA_LIB_PATH_JENDL = ("/Users/okumuras/Documents/nucleardata/JENDL/jendl-ddf-2015/")
+DECAY_DATA_LIB_PATH_JENDL = ("/Users/okumuras/Documents/nucleardata/JENDL/jendl5-dec_upd3/")
+DECAY_DATA_LIB_PATH = DECAY_DATA_LIB_PATH_JENDL
 
 """ true if the time dependent decay heats and delayed neutron yield are calculated """
 DECAYHEAT = True
@@ -31,7 +32,8 @@ DECAYHEAT = True
 """ simple format (Oyak format) of the decay data library file to be used in the calculation """
 # DEFAULT_DECAY_FILE = "../DecayData/ENDFDD-BVII1.py.dat"
 # DEFAULT_DECAY_FILE = "../DecayData/JEFF33DD.py.dat"
-DEFAULT_DECAY_FILE = "../DecayData/JENDL2015DD.py.dat"
+# DEFAULT_DECAY_FILE = "../DecayData/JENDL2015DD.py.dat"
+DEFAULT_DECAY_FILE = "../DecayData/JENDL5.0.py.dat"
 # DEFAULT_DECAY_FILE = "../Oyak/JENDLFPD2011.dat"
 # DEFAULT_DECAY_FILE = "../Oyak/JENDLFPD2015.dat"
 # DEFAULT_DECAY_FILE = "../Oyak/ENDFDD-BVII1.dat"

@@ -23,12 +23,17 @@ def bateman(lmbds, Y0=1.0, t=20):
             lmbd_product *= lmbds[i - 1]
         xi = 0.0
         for k in range(i + 1):
+            if lmbds[k] == None:
+                continue
             denominator = 1.0
             for l in range(i + 1):
+                if lmbds[l] == None:
+                    continue
                 if l == k:
                     continue
                 if lmbds[l] == lmbds[k]:
                     lmbds[k] *= 0.0001
+
                 denominator *= lmbds[l] - lmbds[k]
 
             xi += lmbd_product / denominator * exp(-lmbds[k] * t) * Y0

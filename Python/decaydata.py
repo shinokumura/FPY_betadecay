@@ -264,6 +264,58 @@ def read_decay_data():
     return decaydata
 
 
+#  \u03B1 	α 	GREEK SMALL LETTER ALPHA
+#  \u03B2 	β 	GREEK SMALL LETTER BETA
+#  \u03B3 	γ 	GREEK SMALL LETTER GAMMA
+#  \u03B4 	δ 	GREEK SMALL LETTER DELTA
+
+
+def rtyp_to_mode(RTYP):
+    if RTYP == 1.0:
+        return '\u03B2' + '-'
+    elif RTYP == 1.1:
+        return ('double ' + '\u03B2' + '-')
+    elif RTYP == 1.4:
+        return '\u03B2' + '- +' + '\u03B1'
+    elif RTYP == 1.5:
+        return '\u03B2' + '-' + '+ n'
+    elif RTYP == 1.55:
+        return '\u03B2' + '-' + '+ 2n'
+    elif RTYP == 1.555:
+        return '\u03B2' + '-' + '+ 3n'
+    elif RTYP == 1.5555:
+        return '\u03B2' + '-' + '+ 4n'
+    elif RTYP == 2.0:
+        return '\u03B2' + '+'
+    elif RTYP == 2.2:
+        return '\u03B2' + '+'
+    elif RTYP == 2.4:
+        return '\u03B2' + '+ +' + '\u03B1'
+    elif RTYP == 2.7:
+        return '\u03B2' + '+ +' + 'p'
+    elif RTYP == 2.77:
+        return '\u03B2' + '+ +' + '2p'
+    elif RTYP == 2.777:
+        return '\u03B2' + '+ +' + '3p'
+    elif RTYP == 3.0:
+        return 'IT'
+    elif RTYP == 3.4:
+        return 'IT' + '+' + '\u03B1'
+    elif RTYP == 4.0:  # alhpha
+        return '\u03B1'
+    elif RTYP == 5.0:
+        return 'n'
+    elif RTYP == 5.5:
+        return '2n'
+    elif RTYP == 5.55:
+        return '3n'
+    elif RTYP == 7.0:
+        return 'p'
+    elif RTYP == 7.7:
+        return '2p'
+    else:
+        return ""
+
 def calc_daughter(RTYP, Z, A):
     if RTYP == 1.0:
         return Z + 1, A
@@ -311,12 +363,12 @@ def calc_daughter(RTYP, Z, A):
         return Z, A
 
 
+
 decaydata = read_decay_data()
 
-
+from config import DEFAULT_SIGNIFICUNT_NUMBER, SUPER_LONG_LIVED
 class DecayData:
     def __init__(self, nuclide=None, decaymode=None):
-        from config import DEFAULT_SIGNIFICUNT_NUMBER, SUPER_LONG_LIVED
 
         self.nuclide = nuclide  # 40-Zr-99-00  without 0 fill
         self.decaymode = decaymode
@@ -332,10 +384,13 @@ class DecayData:
             self.daughters = []
             self.decayinfo = ""
             self.halflife = SUPER_LONG_LIVED
+            # if self.halflife != None:
             self.lmbd = float(
                 signum_round(log(2) / float(self.halflife), DEFAULT_SIGNIFICUNT_NUMBER)
                 or log(2) / float(SUPER_LONG_LIVED)
             )
+            # else:
+            #     self.lmbd = None
             self.ebeta = 0.0
             self.egamm = 0.0
             self.ealp = 0.0
@@ -352,6 +407,37 @@ class DecayData:
 
     def get_halflife(self):
         return self.halflife
+
+    def get_halflife_formatted(self):
+        year = (365 * 24 * 60 * 60)
+        day = (24 * 60 * 60)
+        hour = (24 * 60)
+        minnute = (60)
+        second = (60)
+
+        if self.halflife == SUPER_LONG_LIVED:
+            return "Long"
+
+        if float(self.halflife) > year:
+            return "{:2.1E} y".format(float(self.halflife) / year)
+
+        elif float(self.halflife) > day:
+            return "{:2.2f} d".format(float(self.halflife) / day)
+
+        elif float(self.halflife) > hour:
+            return "{:2.2f} h".format(float(self.halflife) / hour)
+
+        elif float(self.halflife) > minnute:
+            return "{:2.2f} m".format(float(self.halflife) / minnute)
+
+        elif float(self.halflife) <= second:
+            return "{:2.2f} sec".format(float(self.halflife) )
+
+        else:
+            return ""
+
+
+
 
     def get_lambda(self):
         return self.lmbd
@@ -379,10 +465,12 @@ class DecayData:
         return fig
 
     def get_decaymodes(self):  # all decay modes
-        n = self.get_ndm()
         modes = []
-        for n in decaydata[self.nuclide]["DecayInfo"]:
-            modes += [decaydata[self.nuclide]["DecayInfo"][n]]
+        # try:
+        for n in range(self.get_ndm()):
+            modes += [ decaydata[self.nuclide]["DecayInfo"][n]["RTYP"] ]
+        # except:
+        #     modes = []
         return modes
 
     def get_progonies(self):
@@ -605,115 +693,3 @@ def progenies(nuclide):
     # print(" chain3: ", chain3)
     return progs_dict
 
-
-def diagram(nuclide):
-    from config import MAX_NUMBER_IN_DIAGRAM
-    import networkx as nx
-    import matplotlib.pyplot as plt
-
-    count = 0
-    """ first daughters """
-    pp = DecayData(nuclide)
-    dau = pp.get_daughters()
-
-    chain1 = {}
-    chain1[nuclide] = dau
-
-    queue = deque(dau)  # ['38-Sr-100-00', '38-Sr-99-00', '38-Sr-98-00']
-    chain2 = {}
-    # store the unique decay products that is in the chain from the same parent
-    """ first daughter """
-    while queue:
-        dchain = []
-        da = DecayData(queue[0])
-
-        # for p in range(da.get_ndm()):
-        #     # ''' ignore spontaneous fission '''
-        #     if float(da.get_rtyp(int(p))) != 6.0:
-        dchain = da.get_daughters()
-        # chain2[queue[0]] = [dchain[p]]
-        chain2[queue[0]] = dchain
-
-        """ first daughter's daugther's daughter's... """
-        dqueue = deque(dchain)
-        while dqueue:
-            count += 1
-            dchain2 = []
-            dda = DecayData(dqueue[0])
-
-            for p in range(dda.get_ndm()):
-                #     ''' ignore spontaneous fission '''
-                # if float(dda.get_rtyp(int(p))) != 6.0:
-                dchain2 += [dda.get_next(int(p))]
-                dqueue.append(dda.get_next(int(p)))
-
-            if chain2.get(dqueue[0]) is None:
-                chain2[dqueue[0]] = dchain2
-
-            # fix position, dont move
-            dqueue.popleft()
-            # print("   ",dqueue)
-
-            if count > MAX_NUMBER_IN_DIAGRAM:
-                dqueue = []
-
-        # fix position, dont move
-        queue.popleft()
-        # print(queue)
-
-    progs_dict = {**chain1, **chain2}
-    print(progs_dict)
-
-    pos = {}
-    edge_labels = {}
-    top = len(progs_dict)
-
-    nn = DecayData(nuclide)
-    pos[nuclide] = (top, top)
-    edge_labels[nuclide] = nn.get_halflife()
-
-    appeared = []
-    for node, p in enumerate(progs_dict):
-        posx = posy = 0
-        appeared += [p]
-        for d in progs_dict[p]:
-            if d not in appeared:
-                dd = DecayData(d)
-                edge_labels[d] = dd.get_halflife()  # branching ratio
-
-                side = progs_dict[p].index(d)
-                posx = top + side
-                posy = top - (node + 1)
-                pos[d] = (posx, posy)
-    print(edge_labels)
-    G = nx.DiGraph(progs_dict)
-
-    # sizes = [6000] * top
-    # nx.from_dict_of_dicts(progs_dict)
-    # nx.set_node_attributes(Dig, values=chain2)
-    # for n in G.edges:
-    #     G.edges[n]['labels'] = "test"
-    #     print(G.edges)
-
-    edge_labels = {e: edge_labels["91-Pa-231-00"] for e in G.edges}
-
-    # nx.draw(Dig, with_labels=True, node_color = "red", edge_color = "gray", node_size = 50, width = 1)
-    # nx.draw_networkx_nodes(G, pos, node_color="w", alpha=0.6, node_size=sizes)
-    nx.draw(
-        G,
-        pos=pos,
-        with_labels=True,
-        node_size=6000,
-        font_size=10,
-        node_shape="s",
-        node_color="#FFFFFF",
-        linewidths=1,
-        edgecolors="#000000",
-    )
-
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-
-    # nx.draw_networkx_labels(Dig, pos, fontsize=10)
-    plt.show()
-
-    return G

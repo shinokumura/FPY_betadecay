@@ -2,7 +2,7 @@
 beta decay calculation from the independent FPY data
 """
 
-nuclide = ""
+
 
 if __name__ == "__main__":
     from config import CONVERT, DECAYHEAT, CUMLATIVE
@@ -22,7 +22,8 @@ if __name__ == "__main__":
 
         cumlative()
 
-    if nuclide:
-        from betadecay_chain import *
-
-        diagram(nuclide)
+    
+    # if nuclide:
+    #     from betadecay_chain import *
+    #     nuclide = "86-Rn-219-00"
+    #     diagram(nuclide)
