@@ -1,5 +1,5 @@
 [project]
-name = "fpy_batadecay"
+name = "fpy-betadecay"
 description = "Cumulative FPY and Decay Heat Calculation from TALYS Independent FPY Output"
 version = "1.0.1"
 authors = [
@@ -37,7 +37,16 @@ dependencies = [
 Homepage = "https://github.com/shinokumura/FPY_betadecay"
 Issues = "https://github.com/shinokumura/FPY_betadecay/issues"
 
+[project.scripts]
+fpy-betadecay = "fpy_betadecay.main:cli"
+
+
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

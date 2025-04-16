@@ -1,7 +1,7 @@
 from math import exp
 
-from config import SMALLEST_YIELD_CONSIDERED, DEFAULT_SIGNIFICUNT_NUMBER
-from scripts.utilities import signum_round
+from fpy_betadecay.config import SMALLEST_YIELD_CONSIDERED, DEFAULT_SIGNIFICUNT_NUMBER
+from fpy_betadecay.scripts.utilities import signum_round
 
 
 def singledecay(lmbd, N0, t=20):

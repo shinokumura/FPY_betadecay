@@ -1,8 +1,8 @@
 # read TALYS fission yield file
 
 
-from scripts.elem import ztoelem
-from scripts.utilities import slices
+from fpy_betadecay.scripts.elem import ztoelem
+from fpy_betadecay.scripts.utilities import slices
 
 """
 read TALYS FPY file: yieldZAxxxE-xx.fis file
@@ -42,7 +42,7 @@ convert beoh format FPY data into talys format
 
 def convert_beoh_fpy_data():
     # Convert beoh output to TALYS FPY format
-    with open("tmpFPY.txt") as f:
+    with open("FPY.txt") as f:
         lines = f.readlines()[3:]
     ind = {}
 

@@ -3,8 +3,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # from config import MAX_NUMBER_IN_CHAIN, MAX_NUMBER_IN_DIAGRAM
-from scripts.decay_data import DecayData, rtyp_to_mode, progenies
-from scripts.utilities import format_nuclide
+from .decay_data import DecayData, rtyp_to_mode, progenies
+from .utilities import format_nuclide
 
 
 

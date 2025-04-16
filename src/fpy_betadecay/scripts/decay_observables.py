@@ -5,11 +5,11 @@ import pandas as pd
 import math
 import json
 
-from config import DECAY_HEAT_CALC_TIME
-from scripts.decay_data import DecayData
-from scripts.decay_chain import decaychain
-from scripts.fpy import read_fpy_data
-from scripts.bateman import bateman_solver
+from fpy_betadecay.config import DECAY_HEAT_CALC_TIME
+from .decay_data import DecayData
+from .decay_chain import decaychain
+from .fpy import read_fpy_data
+from .bateman import bateman_solver
 
 
 # pd.reset_option("display.max_columns")
@@ -98,7 +98,7 @@ def calc_cumlative_fpy(decaydataname, TALYS_FPY_FILE):
     cfps = sorted(y1.keys())
     y = {key: y1[key] for key in cfps}
     df = pd.DataFrame.from_dict(y, orient="index")
-    df.to_csv("cumulative.dat", sep=" ", header=False)
+    # df.to_csv("cumulative.dat", sep=" ", header=False)
 
     """ output cmulative yiled  """
     print("#\n#\n#       Nuclide     cumulative     branchingR     DN yield")
@@ -190,11 +190,9 @@ def calc_decay_heat(decaydataname, TALYS_FPY_FILE):
 
             """ loop over number of chains from first daughters of parent nuclide:i """
             for k in dd_dict.keys():
-                # print("time", t, "parent:", i, "chain:", dd_dict[k]['chain'])
                 b = [0.0] * len(dd_dict)
                 g = [0.0] * len(dd_dict)
                 a = [0.0] * len(dd_dict)
-                # dny = [0.0] * len(dd_dict)
                 dny = 0.0
 
                 """
@@ -258,7 +256,6 @@ def calc_decay_heat(decaydataname, TALYS_FPY_FILE):
                 tot_b[tnum] += sum(b)
                 tot_g[tnum] += sum(g)
                 tot_a[tnum] += sum(a)
-                # tot_dny[tnum] += sum(dny)
                 tot_dny[tnum] += dny
 
             coolingt_dep_b[tnum] += tot_b[tnum] * t
@@ -278,39 +275,39 @@ def calc_decay_heat(decaydataname, TALYS_FPY_FILE):
     df["beta*t"] = list(coolingt_dep_b)
     df["gamma*t"] = list(coolingt_dep_g)
     df["dny*t"] = list(coolingt_dep_dny)
-    print(df)
+
+    print("#       time              beta              gammma            dny               beta*t            gamma*t           dny*t")
+    for i, row in df.iterrows():
+        print(
+            "{:18.4E}{:18.4E}{:18.4E}{:18.4E}{:18.4E}{:18.4E}{:18.4E}".format(
+                row["time"],
+                row["beta"],
+                row["gammma"],
+                row["dny"],
+                row["beta*t"],
+                row["gamma*t"],
+                row["dny*t"]
+            )
+        )
 
     # compare with the calc result of U235(nth,f) by Oyak
-    oyak = pd.read_csv(
-        "sample/decayheat-2.53E-8-mev.dat", sep="\s+", header=0, comment="#"
-    )
-    oyak["time"] = oyak["time(s)"].astype(float)
-    df["oyak_b"] = oyak["t*Pb(MeV)"]  # / oyak['time(s)']
-    df["oyak_g"] = oyak["t*Pg(MeV)"]  # / oyak['time(s)']
-    df["oyak_dny"] = oyak["t*d.n.act."]  # / oyak['time(s)']
+    # oyak = pd.read_csv(
+    #     "sample/decayheat-2.53E-8-mev.dat", sep="\s+", header=0, comment="#"
+    # )
+    # oyak["time"] = oyak["time(s)"].astype(float)
+    # df["oyak_b"] = oyak["t*Pb(MeV)"]  # / oyak['time(s)']
+    # df["oyak_g"] = oyak["t*Pg(MeV)"]  # / oyak['time(s)']
+    # df["oyak_dny"] = oyak["t*d.n.act."]  # / oyak['time(s)']
 
-    # plot of beta energy
-    # df.plot('time', y= ['beta*t','oyak_b'], color = ['green','red'] ,xlabel="time", ylabel="t * En_beta [MeV]")
+    # plots of beta/gamma energy and dny
     df.plot("time", "beta*t", color="green")
     plt.xscale("log")
-    # plt.show()
-
-    # plot of gamma energy
-    # df.plot('time', y= ['gamma*t','oyak_g'], color = ['green','red'] ,xlabel="time", ylabel="t * En_gamma [MeV]")
     df.plot("time", "gamma*t", color="orange")
     plt.xscale("log")
-    # plt.show()
-
-    # plot of alpha energy
-    # df.plot('time', 'gamma*a', color = 'orange')
-    # plt.xscale('log')
-    # plt.show()
-
-    # plot of delayed neutron yiedl
-    # df.plot('time', y= ['dny*t','oyak_dny'], color = ['green','red'] ,xlabel="time", ylabel="t * delayed neutron yield")
-    df.plot("time", "dny*t", color="green")
+    plt.show()
+    df.plot("time", "dny*t", color="blue")
     plt.xscale("log")
-    # plt.show()
+    plt.show()
 
     return df
 

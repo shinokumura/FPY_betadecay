@@ -5,13 +5,13 @@ import os
 import argparse
 import pathlib
 
-from config import DECAY_DATA_LIB
+from fpy_betadecay.config import DECAY_DATA_LIBS
 
-from scripts.decay_data import convert_ddlibrary, DecayData
-from scripts.decay_observables import calc_decay_heat, calc_cumlative_fpy
+from fpy_betadecay.scripts.decay_data import convert_ddlibrary, DecayData
+from fpy_betadecay.scripts.decay_observables import calc_decay_heat, calc_cumlative_fpy
 
 import logging
-logging.basicConfig(filename="process.log", level=logging.DEBUG, filemode="w")
+logging.basicConfig(filename="process.log", level=logging.ERROR, filemode="w")
 
 
 def dir_path(string):
@@ -30,25 +30,22 @@ def cli():
     parser.add_argument(
         "-conv",
         "--convert",
-        # type=dir_path,
-        # required=True,
-        choices=[k for k in DECAY_DATA_LIB.keys()],
+
+        choices=[k for k in DECAY_DATA_LIBS.keys()],
         help="Convert ENDF-6 format Decay Data into JSON.",
     )
 
     parser.add_argument(
-        "-c",
+        "-calc",
         "--calculate",
-        # type=argparse.FileType('r', encoding='UTF-8'),
         type=pathlib.Path,
-        # required=True,
         help="File path to the TALYS Independent FPY file to calculate decay heat and cumulative yield",
     )
 
     parser.add_argument(
         "-dd",
         "--decaydata",
-        choices=[k for k in DECAY_DATA_LIB.keys()],
+        choices=[k for k in DECAY_DATA_LIBS.keys()],
         help="Name of decay data used in the beta-decay calculations.",
     )
 

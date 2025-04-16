@@ -1,3 +1,5 @@
+from pathlib import Path
+
 """ cut off time of HL when cumulative yield is calculated"""
 DEFAULT_LONG_LIVED = 1000.0 * 365 * 24 * 60 * 60  # 1,000 years
 
@@ -21,31 +23,33 @@ TALYS_FPY_FILE = "Sample_FPY_Files/pu239_yieldZA1.00E-06.fis.gef"
 
 DEFAULT_DECAYDATA = "ENDF8.1"
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 DECAY_DATA_LIBS = {
     "ENDF7.1": {
         "ENDF-6": "/Users/okumuras/Documents/nucleardata/ENDF/ENDFdecay/",
-        "SimpleENDF": "./DecayData/SimpleENDF/ENDFDD-BVII1.py.dat",
-        "JSON": "./DecayData/JSON/ENDFDD-BVII1.json",
+        "SimpleENDF": f"{BASE_DIR}/DecayData/SimpleENDF/ENDFDD-BVII1.py.dat",
+        "JSON": f"{BASE_DIR}/DecayData/JSON/ENDFDD-BVII1.json",
     },
     "ENDF8.1": {
         "ENDF-6": "/Users/okumuras/Documents/nucleardata/ENDF/decay-version.VIII.1/",
-        "SimpleENDF": "./DecayData/SimpleENDF/ENDFDD-B8.1.py.dat",
-        "JSON": "./DecayData/JSON/ENDFDD-B8.1.json",
+        "SimpleENDF": f"{BASE_DIR}/DecayData/SimpleENDF/ENDFDD-B8.1.py.dat",
+        "JSON": f"{BASE_DIR}/DecayData/JSON/ENDFDD-B8.1.json",
     },
     "JENDL2015": {
         "ENDF-6": "/Users/okumuras/Documents/nucleardata/JENDL/jendl-ddf-2015/",
-        "SimpleENDF": "./DecayData/SimpleENDF/JENDL2015DD.py.dat",
-        "JSON": "./DecayData/JSON/JENDL2015DD.json",
+        "SimpleENDF": f"{BASE_DIR}/DecayData/SimpleENDF/JENDL2015DD.py.dat",
+        "JSON": f"{BASE_DIR}/DecayData/JSON/JENDL2015DD.json",
     },
     "JEFF3.3": {
         "ENDF-6": "/Users/okumuras/Documents/nucleardata/JEFF33-rdd/",
-        "SimpleENDF": "./DecayData/SimpleENDF/JEFF33DD.py.dat",
-        "JSON": "./DecayData/JSON/JEFF33DD.json",
+        "SimpleENDF": f"{BASE_DIR}/DecayData/SimpleENDF/JEFF33DD.py.dat",
+        "JSON": f"{BASE_DIR}/DecayData/JSON/JEFF33DD.json",
     },
     "JENDL5.0": {
         "ENDF-6": "/Users/okumuras/Documents/nucleardata/JENDL/jendl5-dec_upd3/",
-        "SimpleENDF": "./DecayData/SimpleENDF/JENDL5.0.py.dat",
-        "JSON": "./DecayData/JSON/JENDL5.0.json",
+        "SimpleENDF": f"{BASE_DIR}/DecayData/SimpleENDF/JENDL5.0.py.dat",
+        "JSON": f"{BASE_DIR}/DecayData/JSON/JENDL5.0.json",
     },
 }
 

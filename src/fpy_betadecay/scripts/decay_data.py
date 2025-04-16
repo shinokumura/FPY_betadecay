@@ -6,9 +6,7 @@ from natsort import natsorted
 from math import log
 from collections import deque
 
-from scripts.elem import ztoelem
-from scripts.utilities import slices, signum_round
-from config import (
+from fpy_betadecay.config import (
     DEFAULT_DECAYDATA,
     DECAY_DATA_LIBS,
     DEFAULT_LONG_LIVED,
@@ -16,6 +14,9 @@ from config import (
     DEFAULT_SIGNIFICUNT_NUMBER,
     MAX_NUMBER_IN_CHAIN
 )
+from .elem import ztoelem
+from .utilities import slices, signum_round
+
 
 """
 convert original ENDF-6 fromatted Decay Data Libray to the simple format,
@@ -386,6 +387,7 @@ def progenies(nuclide, decaydataname):
 
     queue = deque(dau)  # ['38-Sr-100-00', '38-Sr-99-00', '38-Sr-98-00']
     chain2 = {}
+    
     # store the unique decay products that is in the chain from the same parent
     """ first daughter(s) """
     while queue:

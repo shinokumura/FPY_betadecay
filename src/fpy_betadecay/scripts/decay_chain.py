@@ -1,7 +1,7 @@
 import copy
 
-from scripts.decay_data import DecayData
-from config import MAX_NUMBER_IN_CHAIN
+from .decay_data import DecayData
+from fpy_betadecay.config import MAX_NUMBER_IN_CHAIN
 
 def gen_chains(decaydataname, chains, brs, rtyps, nuk, depth=0):
     """
