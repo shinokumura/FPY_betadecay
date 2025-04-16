@@ -1,4 +1,0 @@
-matplotlib==3.4.1
-natsort==8.0.2
-networkx==2.6.3
-pandas==1.2.4
