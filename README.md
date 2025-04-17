@@ -101,7 +101,7 @@ fpy-betadecay -chain 82-Pb-211-00 -dd ENDF8.1
 ```
 
 - `-chain`: Starting nuclide name using the format `Z-El-A-II`  
-   (e.g., `6-C-14-00`, `95-Am-242-01`) where:
+   (e.g., `6-C-14-00`, `95-Am-242-01`, see examples in [ENDF/B8.1 JSON example](https://github.com/shinokumura/FPY_betadecay/blob/main/DecayData/JSON/ENDFDD-BVII1.json)) where:
    - `Z` is the proton number
    - `El` is the element symbol
    - `A` is the mass number
