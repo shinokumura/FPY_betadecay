@@ -5,10 +5,11 @@ import os
 import argparse
 import pathlib
 
-from fpy_betadecay.config import DECAY_DATA_LIBS
+from fpy_betadecay.config import DECAY_DATA_LIBS, DEFAULT_DECAYDATA
 
 from fpy_betadecay.scripts.decay_data import convert_ddlibrary, DecayData
 from fpy_betadecay.scripts.decay_observables import calc_decay_heat, calc_cumlative_fpy
+from fpy_betadecay.scripts.decay_diagram import diagram
 
 import logging
 logging.basicConfig(filename="process.log", level=logging.ERROR, filemode="w")
@@ -49,6 +50,12 @@ def cli():
         help="Name of decay data used in the beta-decay calculations.",
     )
 
+    parser.add_argument(
+        "-chain",
+        "--decaychain",
+        help="Show decay chain reading from the decay data library.",
+    )
+
     args = parser.parse_args()
 
     # print(args)
@@ -57,12 +64,26 @@ def cli():
         convert_ddlibrary(args.convert)
 
     if args.calculate:
-        """init decay data"""
-        DecayData.load_decay_data(args.decaydata)
+        if args.decaydata:
+            decaydataname = args.decaydata
+        else:
+            decaydataname = DEFAULT_DECAYDATA
 
         """run calculations"""
-        calc_decay_heat(args.decaydata, args.calculate)
-        calc_cumlative_fpy(args.decaydata, args.calculate)
+        calc_decay_heat(args.calculate, args.decaydata)
+        calc_cumlative_fpy(args.calculate, args.decaydata)
+
+    if args.decaychain:
+        if args.decaydata:
+            decaydataname = args.decaydata
+        else:
+            decaydataname = DEFAULT_DECAYDATA
+
+        """init decay data"""
+        DecayData.load_decay_data(decaydataname)
+
+        """plot"""
+        diagram(args.decaychain, args.decaydata)
 
 
 if __name__ == "__main__":

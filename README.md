@@ -93,6 +93,23 @@ fpy-betadecay -calc Sample_FPY_Files/u235_yieldZA1.00E-06.fis -dd JENDL5.0
 
 ---
 
+## 🔍 6. Preview Decay Chain for a Nuclide
+
+To display the decay chain starting from a specific nuclide:
+```
+fpy-betadecay -chain 82-Pb-211-00 -dd ENDF8.1
+```
+
+- `-chain`: Starting nuclide name using the format `Z-El-A-II`  
+   (e.g., `6-C-14-00`, `95-Am-242-01`) where:
+   - `Z` is the proton number
+   - `El` is the element symbol
+   - `A` is the mass number
+   - `II` is the isomeric state (`00` for ground state)
+- `-dd`: Name of the decay data library (must exist in `DECAY_DATA_LIBS`)
+
+
+
 ## 📝 License
 
 This code is distributed under the MIT license with an IAEA clause.  

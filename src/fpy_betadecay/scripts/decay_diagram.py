@@ -11,7 +11,7 @@ from .utilities import format_nuclide
 
 def diagram(nuclide, decaydataname):
 
-    progs_dict = progenies(nuclide)
+    progs_dict = progenies(nuclide, decaydataname)
     #### {'42-Mo-99-00': ['43-Tc-99-00', '43-Tc-99-01'], '43-Tc-99-00': ['44-Ru-99-00'], '44-Ru-99-00': [], '43-Tc-99-01': ['44-Ru-99-00', '43-Tc-99-00']}
 
     pos = {}
